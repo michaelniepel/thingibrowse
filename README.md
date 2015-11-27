@@ -4,4 +4,7 @@ Browse and view your local files in the browser.
 
 ##TODO:
 * serve stl files
-* view with thingiview.js
+* 3d preview using thingiview.js
+* search
+* tag models
+* etc
