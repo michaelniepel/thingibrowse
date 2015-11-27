@@ -10,7 +10,7 @@ app.use('/api/models', serveIndex(config.models_path,
   {icons:true,
 		filter:function(file,pos,list) {
 			console.log(arguments);
-			return (file.indexOf('.') === -1 || file.indexOf('stl') >= 1);
+			return (file.indexOf('.') === -1 || file.indexOf('stl') >= 1 || file.indexOf('STL') >= 1);
 		}
 	}
 ));
