@@ -1,10 +1,11 @@
 import express from 'express';
 import serveIndex from 'serve-index';
+import config from './config';
 
 const app = express();
 
 
-app.use('/models', serveIndex('/Users/michaelniepel/Dropbox/3dprinter/models',
+app.use('/', serveIndex(config.models_path,
   {icons:true,
 		filter:function(file,pos,list) {
 			console.log(arguments);
