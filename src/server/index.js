@@ -6,7 +6,7 @@ import config from './config';
 const app = express();
 
 
-app.use('/', serveIndex(config.models_path,
+app.use('/api/models', serveIndex(config.models_path,
   {icons:true,
 		filter:function(file,pos,list) {
 			console.log(arguments);
@@ -15,7 +15,7 @@ app.use('/', serveIndex(config.models_path,
 	}
 ));
 
-app.use('/', serveStatic(config.models_path));
+app.use('/api/models', serveStatic(config.models_path));
 
 app.get('/api', (req, res) => {
   res.json({
