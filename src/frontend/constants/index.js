@@ -1,1 +1,2 @@
 export const RECEIVED_SHOUTS = 'RECEIVED_SHOUTS';
+export const RECEIVED_DIRS = 'RECEIVED_DIRS';

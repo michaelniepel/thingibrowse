@@ -1,5 +1,5 @@
 import React from 'react';
-import { fetchShouts } from '../actions';
+import { fetchShouts, fetchDirs } from '../actions';
 import { connect } from 'react-redux';
 
 class Application extends React.Component {
@@ -9,6 +9,7 @@ class Application extends React.Component {
 
   componentWillMount() {
     this.props.dispatch(fetchShouts());
+    this.props.dispatch(fetchDirs());
   }
 
   render() {
@@ -18,9 +19,13 @@ class Application extends React.Component {
         <ul>
           { this.props.shouts.map((s, i) => <li key={i}>{s}</li>) }
         </ul>
+        <h2>Dirs</h2>
+        <ul>
+          { this.props.dirs.map((s, i) => <li key={i}>{s}</li>) }
+        </ul>
       </div>
     );
   }
 }
 
-export default connect(state => ({ shouts: state.shouts }))(Application);
+export default connect(state => ({ shouts: state.shouts, dirs: state.dirs }))(Application);

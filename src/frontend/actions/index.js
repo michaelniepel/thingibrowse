@@ -1,5 +1,5 @@
 import 'whatwg-fetch'; //polyfill
-import { RECEIVED_SHOUTS } from '../constants';
+import { RECEIVED_SHOUTS, RECEIVED_DIRS } from '../constants';
 
 export function fetchShouts() {
 	return dispatch => {
@@ -9,5 +9,18 @@ export function fetchShouts() {
 				type: RECEIVED_SHOUTS,
 				shouts: json.shouts
 		}));
+	}
+}
+
+
+export function fetchDirs()  {
+	return dispatch => {
+		fetch('/api/models')
+			.then(resp => resp.json())
+			.then(json => dispatch({
+				type: RECEIVED_DIRS,
+				dirs: json
+			}));
+
 	}
 }
