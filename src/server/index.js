@@ -1,5 +1,6 @@
 import express from 'express';
 import serveIndex from 'serve-index';
+import serveStatic from 'serve-static';
 import config from './config';
 
 const app = express();
@@ -13,6 +14,8 @@ app.use('/', serveIndex(config.models_path,
 		}
 	}
 ));
+
+app.use('/', serveStatic(config.models_path));
 
 app.get('/api', (req, res) => {
   res.json({
