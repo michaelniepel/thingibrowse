@@ -1,0 +1,14 @@
+{
+  "name": "thingibrowse",
+  "version": "0.0.1",
+  "description": "STL models browser",
+  "main": "index.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "author": "Michael Niepel",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.13.3"
+  }
+}
