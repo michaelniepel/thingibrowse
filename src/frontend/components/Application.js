@@ -1,5 +1,5 @@
 import React from 'react';
-import { fetchShouts, fetchDirs } from '../actions';
+import { fetchDirs } from '../actions';
 import { connect } from 'react-redux';
 
 class Application extends React.Component {
@@ -8,18 +8,13 @@ class Application extends React.Component {
   }
 
   componentWillMount() {
-    this.props.dispatch(fetchShouts());
     this.props.dispatch(fetchDirs());
   }
 
   render() {
     return (
       <div>
-        <h1>Shouts</h1>
-        <ul>
-          { this.props.shouts.map((s, i) => <li key={i}>{s}</li>) }
-        </ul>
-        <h2>Dirs</h2>
+        <h1>Dirs { this.props.models_path }</h1>
         <ul>
           { this.props.dirs.map((s, i) => <li key={i}>{s}</li>) }
         </ul>
@@ -28,4 +23,4 @@ class Application extends React.Component {
   }
 }
 
-export default connect(state => ({ shouts: state.shouts, dirs: state.dirs }))(Application);
+export default connect(state => ({ dirs: state.dirs, models_path: '/' }))(Application);

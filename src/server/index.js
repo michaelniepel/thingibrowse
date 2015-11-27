@@ -17,17 +17,6 @@ app.use('/api/models', serveIndex(config.models_path,
 
 app.use('/api/models', serveStatic(config.models_path));
 
-app.get('/api', (req, res) => {
-  res.json({
-    shouts: [
-      'Hello World!',
-      'This is React and Webpack...',
-      'They make development fun',
-      'Another shout'
-    ]
-  });
-});
-
 app.get('/api/test', (req, res) => {
   res.json({
     hello: "world"
