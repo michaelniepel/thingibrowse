@@ -7,4 +7,4 @@ Browse and view your local files in the browser.
 * 3d preview using thingiview.js
 * search
 * tag models
-* etc
+* slice with presets
