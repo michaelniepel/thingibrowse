@@ -1,4 +1,5 @@
 import gulp from 'gulp';
+import gutil from 'gulp-util';
 import webpack from 'webpack';
 import WebpackHotMiddleware from 'webpack-hot-middleware';
 import WebpackDevMiddleware from 'webpack-dev-middleware';
@@ -52,6 +53,16 @@ gulp.task('backend-watch', () => {
     nodemon.restart();
   });
 });
+
+gulp.task('build', () =>[
+  webpack(backendConfig).run(function(err, stats) {
+		if(err) throw new gutil.PluginError("webpack:build-dev", err);
+		gutil.log("[webpack:build-dev]", stats.toString({
+			colors: true
+		}));
+		// callback();
+	})
+]);
 
 gulp.task('server', ['backend-watch'], () => {
   nodemon({

@@ -1,6 +1,17 @@
 import express from 'express';
+import serveIndex from 'serve-index';
 
 const app = express();
+
+
+app.use('/models', serveIndex('/Users/michaelniepel/Dropbox/3dprinter/models',
+  {icons:true,
+		filter:function(file,pos,list) {
+			console.log(arguments);
+			return (file.indexOf('.') === -1 || file.indexOf('stl') >= 1);
+		}
+	}
+));
 
 app.get('/api', (req, res) => {
   res.json({
