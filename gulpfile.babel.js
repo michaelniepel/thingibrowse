@@ -30,6 +30,9 @@ gulp.task('dev', () => {
     request({
       // use req.originalUrl instead of req.path since mount point is removed
       // from req.path (ie: '/api*' will be removed from req.path)
+      headers: {
+        'Accept': 'application/json',
+      },
       url: 'http://localhost:8080' + req.originalUrl,
       qs: req.query,
       method: req.method.toUpperCase()
