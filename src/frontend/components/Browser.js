@@ -39,7 +39,9 @@ class Browser extends React.Component {
                 <div className="pure-u-1-4" key={i}>
                   <ModelViewer stl_url={s}/>
                 </div>
-              : <div className="pure-u-1-4 dirItem" key={i}><Link to={link}><i className="fa fa-folder-o fa-5x"></i><br/>{s}</Link></div>;
+              : <div className="pure-u-1-4 dirItem" key={i}>
+                  <h3><Link to={link}><i className="fa fa-folder-o fa-5x"></i><br/>{s}</Link></h3>
+                </div>;
             })
           }
       </div>

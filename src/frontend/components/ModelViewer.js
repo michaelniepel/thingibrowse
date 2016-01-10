@@ -14,7 +14,7 @@ export class ModelViewer extends React.Component {
     const { stl_url } = this.props
     return (
       <div>
-        <i className="fa fa-file-o fa-5x"></i><br/> { stl_url }
+        <h3><i className="fa fa-file-o fa-5x"></i><br/> { stl_url }</h3>
       </div>
     );
   }
