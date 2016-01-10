@@ -7,6 +7,10 @@ var webpack = require('webpack');
 var path = require('path');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
 
+var autoprefixer = require('autoprefixer');
+var precss       = require('precss');
+var cssnext = require('cssnext');
+
 var frontendConfig = {
   entry: [
     'webpack-hot-middleware/client',
@@ -39,11 +43,21 @@ var frontendConfig = {
         loaders: ['babel']
       },
       {
-        test: /\.scss$/,
-        include: path.join(__dirname, 'src', 'frontend', 'scss'),
-        loaders: ['style', 'css', 'sass']
+        test: /\.css$/,
+        include: path.join(__dirname, 'src', 'frontend'),
+        loader: "style-loader!css-loader!postcss-loader"
+      },
+      {
+        test: /\.(jpe?g|png|gif|svg)$/i,
+        loaders: [
+            'file?hash=sha512&digest=hex&name=[hash].[ext]',
+            'image-webpack?bypassOnDebug&optimizationLevel=7&interlaced=false'
+        ]
       }
     ]
+  },
+  postcss: function () {
+      return [autoprefixer, precss, cssnext];
   }
 };
 

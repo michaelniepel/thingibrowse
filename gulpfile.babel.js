@@ -39,8 +39,15 @@ gulp.task('dev', () => {
     }).pipe(res);
   });
 
-  server.use(WebpackDevMiddleware(compiler));
+  var webpackDevMiddleware = WebpackDevMiddleware(compiler);
+
+  server.use(webpackDevMiddleware);
   server.use(WebpackHotMiddleware(compiler));
+
+  server.get('*', function(req, res) {
+    req.url = '/';
+    webpackDevMiddleware(req, res, ()=>{});
+  });
 
   server.listen(3000, 'localhost', (err) => {
     if (err)
@@ -56,16 +63,6 @@ gulp.task('backend-watch', () => {
     nodemon.restart();
   });
 });
-
-gulp.task('build', () =>[
-  webpack(backendConfig).run(function(err, stats) {
-		if(err) throw new gutil.PluginError("webpack:build-dev", err);
-		gutil.log("[webpack:build-dev]", stats.toString({
-			colors: true
-		}));
-		// callback();
-	})
-]);
 
 gulp.task('server', ['backend-watch'], () => {
   nodemon({
