@@ -14,17 +14,16 @@ class Browser extends React.Component {
   }
 
   handleDirClick(e) {
-    // console.log(e.target.text);
+    const { path, dispatch } = this.props;
     const dirName = e.target.text;
-    const fullPath = [...this.props.path, dirName]
-    this.props.dispatch(fetchDirs(fullPath));
+    dispatch(fetchDirs(path, dirName));
   }
 
   render() {
     const { dirs, isFetching, path } = this.props
     return (
       <div>
-        <h2>{path}</h2>
+        <h2>{path.join('/')}</h2>
         <ul>
           {
             dirs.map((s, i) => {
@@ -44,7 +43,7 @@ class Browser extends React.Component {
 Browser.propTypes = {
   dirs: React.PropTypes.array,
   isFetching: React.PropTypes.bool,
-  parh: React.PropTypes.array
+  path: React.PropTypes.array
 }
 
 // Note: use https://github.com/faassen/reselect for better performance.

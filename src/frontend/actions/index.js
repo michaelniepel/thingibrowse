@@ -15,13 +15,14 @@ function receivedDirs() {
 	}
 }
 
-export function fetchDirs(fullPath)  {
+export function fetchDirs(path = [], dirName = undefined) {
+	let fullPath = (dirName == '..' && path.length > 0 ? path.slice(0, path.length - 1) : [...path, dirName])
 	return dispatch => {
 		dispatch(requestDirs())
 		// console.log(fullPath);
-		fullPath = fullPath || ['/']
+		fullPath = fullPath || []
 		let pathString = fullPath.join('/')
-		return fetch('/api/models'+pathString)
+		return fetch('/api/models/'+pathString)
 			.then(resp => resp.json())
 			.then(json => dispatch({
 				type: RECEIVED_DIRS,
