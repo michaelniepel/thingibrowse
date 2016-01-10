@@ -1,1 +1,2 @@
 export const RECEIVED_DIRS = 'RECEIVED_DIRS';
+export const REQUEST_DIRS = 'REQUEST_DIRS';

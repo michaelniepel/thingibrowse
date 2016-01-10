@@ -19,6 +19,7 @@ var frontendConfig = {
 
   output: {
     filename: 'bundle.js',
+    publicPath: 'http://localhost:3000/',
     path: path.join(__dirname, 'build', 'public')
   },
 
