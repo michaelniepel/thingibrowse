@@ -23,6 +23,7 @@ export function fetchDirs(splat) {
 			.then(json => dispatch({
 				type: RECEIVED_DIRS,
 				dirs: json,
+				splat: splat
 			}));
 
 	}

@@ -15,7 +15,7 @@ const actionsMap = {
   [RECEIVED_DIRS]: (state, action) => {
     return Object.assign({}, state, {
       isFetching: false,
-      items: action.dirs,
+      items: action.splat !== undefined ? ['..', ...action.dirs] : action.dirs,
       lastUpdated: action.receivedAt,
     });
   }

@@ -11,13 +11,13 @@ class Browser extends React.Component {
   }
 
   componentWillMount() {
-    console.log('browser component will mount');
+    // console.log('browser component will mount');
     const { routeParams, dispatch } = this.props;
     dispatch(fetchDirs(routeParams.splat));
   }
 
   componentDidUpdate(prevProps) {
-    console.log('browser component did update');
+    // console.log('browser component did update');
     const oldSplat = prevProps.routeParams.splat;
     const { routeParams, dispatch } = this.props;
     if (oldSplat !== routeParams.splat)
@@ -32,11 +32,13 @@ class Browser extends React.Component {
         <ul>
           {
             dirs.map((s, i) => {
+              const lastIndex = path.lastIndexOf('/');
+              const link = (s !== '..' ? path+'/'+s : (lastIndex === -1 ? '/' : '/'+path.slice(0, lastIndex)))
               return s.indexOf('.stl') > 0 || s.indexOf('.STL') > 0 ?
                 <li key={i}>
                   <ModelViewer stl_url={s}/>
                 </li>
-              : <li key={i}><Link to={`${path}/${s}`}>{s}</Link></li>;
+              : <li key={i}><Link to={link}>{s}</Link></li>;
             })
           }
         </ul>
