@@ -11,9 +11,10 @@ export class ModelViewer extends React.Component {
   }
 
   render() {
+    const { stl_url } = this.props
     return (
       <div>
-        <h1>File { this.props.stl_url }</h1>
+        <strong>File { stl_url }</strong>
       </div>
     );
   }
