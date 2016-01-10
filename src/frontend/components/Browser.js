@@ -5,6 +5,8 @@ import { Link } from 'react-router';
 
 import { ModelViewer } from './ModelViewer';
 
+require("./Browser.css");
+
 class Browser extends React.Component {
   constructor(props) {
     super(props);
@@ -28,20 +30,18 @@ class Browser extends React.Component {
     const { dirs, isFetching, routeParams } = this.props;
     const path = routeParams.splat === undefined ? '' : routeParams.splat;
     return (
-      <div>
-        <ul>
+      <div className="pure-g browser">
           {
             dirs.map((s, i) => {
               const lastIndex = path.lastIndexOf('/');
               const link = (s !== '..' ? path+'/'+s : (lastIndex === -1 ? '/' : '/'+path.slice(0, lastIndex)))
               return s.indexOf('.stl') > 0 || s.indexOf('.STL') > 0 ?
-                <li key={i}>
+                <div className="pure-u-1-4" key={i}>
                   <ModelViewer stl_url={s}/>
-                </li>
-              : <li key={i}><Link to={link}>{s}</Link></li>;
+                </div>
+              : <div className="pure-u-1-4 dirItem" key={i}><Link to={link}><i className="fa fa-folder-o fa-5x"></i><br/>{s}</Link></div>;
             })
           }
-        </ul>
       </div>
     );
   }

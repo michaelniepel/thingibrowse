@@ -6,6 +6,13 @@ import { createHistory } from 'history';
 // though it is not used in this file
 import React from 'react';
 
+// CSS
+require('./purecss/pure-min.css');
+require('./purecss/grids-responsive-min.css');
+require('./index.css');
+
+require("font-awesome-webpack");
+
 ReactDOM.render(
   <Root history={ createHistory() } />,
   document.getElementById('container')

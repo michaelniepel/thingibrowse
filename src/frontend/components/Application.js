@@ -1,5 +1,7 @@
 import React from 'react';
 
+require("./Application.css");
+
 export default class Application extends React.Component {
   constructor(props) {
     super(props);
