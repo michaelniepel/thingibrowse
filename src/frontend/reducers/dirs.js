@@ -3,7 +3,6 @@ import { RECEIVED_DIRS, REQUEST_DIRS } from '../constants';
 const initialState = {
   isFetching: false,
   items: [],
-  path: []
 };
 
 
@@ -16,9 +15,8 @@ const actionsMap = {
   [RECEIVED_DIRS]: (state, action) => {
     return Object.assign({}, state, {
       isFetching: false,
-      items: action.path.length == 0 ? action.dirs : ['..', ...action.dirs],
+      items: action.dirs,
       lastUpdated: action.receivedAt,
-      path: action.path
     });
   }
 };

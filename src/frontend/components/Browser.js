@@ -1,6 +1,7 @@
 import React from 'react';
 import { fetchDirs } from '../actions';
 import { connect } from 'react-redux';
+import { Link } from 'react-router';
 
 import { ModelViewer } from './ModelViewer';
 
@@ -10,20 +11,24 @@ class Browser extends React.Component {
   }
 
   componentWillMount() {
-    this.props.dispatch(fetchDirs());
+    console.log('browser component will mount');
+    const { routeParams, dispatch } = this.props;
+    dispatch(fetchDirs(routeParams.splat));
   }
 
-  handleDirClick(e) {
-    const { path, dispatch } = this.props;
-    const dirName = e.target.text;
-    dispatch(fetchDirs(path, dirName));
+  componentDidUpdate(prevProps) {
+    console.log('browser component did update');
+    const oldSplat = prevProps.routeParams.splat;
+    const { routeParams, dispatch } = this.props;
+    if (oldSplat !== routeParams.splat)
+      dispatch(fetchDirs(routeParams.splat));
   }
 
   render() {
-    const { dirs, isFetching, path } = this.props
+    const { dirs, isFetching, routeParams } = this.props;
+    const path = routeParams.splat === undefined ? '' : routeParams.splat;
     return (
       <div>
-        <h2>{path.join('/')}</h2>
         <ul>
           {
             dirs.map((s, i) => {
@@ -31,7 +36,7 @@ class Browser extends React.Component {
                 <li key={i}>
                   <ModelViewer stl_url={s}/>
                 </li>
-              : <li key={i}><a href="#" onClick={s => this.handleDirClick(s)}>{s}</a></li>;
+              : <li key={i}><Link to={`${path}/${s}`}>{s}</Link></li>;
             })
           }
         </ul>

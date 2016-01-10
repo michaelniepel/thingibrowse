@@ -18,8 +18,9 @@ export default class Root extends React.Component {
       <Provider store={ store }>
         <Router history={ history }>
           <Route path='/' component={ Application } >
-            <IndexRoute component={ Browser } />
-            <Route path='/view' component={ Browser } />
+            <IndexRoute component={ Browser} />
+            <Route path='**' component={ Browser } />
+            <Route path='view/:path' component={ Browser } />
           </Route>
         </Router>
       </Provider>
