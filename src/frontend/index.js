@@ -14,9 +14,6 @@ require('./index.css');
 require('font-awesome-webpack');
 
 window.THREE = require('three');
-require('script!./thingiview/plane');
-require('script!./thingiview/thingiview');
-
 
 ReactDOM.render(
   <Root history={ createHistory() } />,
