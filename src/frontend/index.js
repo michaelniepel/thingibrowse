@@ -11,7 +11,12 @@ require('./purecss/pure-min.css');
 require('./purecss/grids-responsive-min.css');
 require('./index.css');
 
-require("font-awesome-webpack");
+require('font-awesome-webpack');
+
+window.THREE = require('three');
+require('script!./thingiview/plane');
+require('script!./thingiview/thingiview');
+
 
 ReactDOM.render(
   <Root history={ createHistory() } />,
