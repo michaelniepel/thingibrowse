@@ -8,7 +8,7 @@ export default class Application extends React.Component {
   }
 
   componentWillMount() {
-    console.log('application component will mount');
+    // console.log('application component will mount');
   }
 
   render() {

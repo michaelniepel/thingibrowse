@@ -3,7 +3,7 @@ import { fetchDirs } from '../actions';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
 
-import { ModelViewer } from './ModelViewer';
+import ModelViewer from './ModelViewer';
 
 require("./Browser.css");
 
@@ -35,9 +35,10 @@ class Browser extends React.Component {
             dirs.map((s, i) => {
               const lastIndex = path.lastIndexOf('/');
               const link = (s !== '..' ? path+'/'+s : (lastIndex === -1 ? '/' : '/'+path.slice(0, lastIndex)))
+              const stl_url = path+'/'+s
               return s.indexOf('.stl') > 0 || s.indexOf('.STL') > 0 ?
                 <div className="pure-u-1-4" key={i}>
-                  <ModelViewer stl_url={s}/>
+                  <ModelViewer stl_url={stl_url} name={s} />
                 </div>
               : <div className="pure-u-1-4 dirItem" key={i}>
                   <h3><Link to={link}><i className="fa fa-folder-o fa-5x"></i><br/>{s}</Link></h3>
@@ -64,4 +65,4 @@ function select(state) {
   }
 }
 
-export default connect(select)(Browser);
+export default connect(select)(Browser)

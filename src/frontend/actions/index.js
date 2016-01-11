@@ -1,5 +1,5 @@
 import 'whatwg-fetch'; //polyfill
-import { RECEIVED_DIRS, REQUEST_DIRS } from '../constants';
+import { RECEIVED_DIRS, REQUEST_DIRS, REQUEST_STL, RECEIVED_STL } from '../constants';
 
 function requestDirs() {
 	return {
@@ -7,10 +7,11 @@ function requestDirs() {
 	}
 }
 
-function receivedDirs() {
+function receivedDirs(json, splat) {
 	return {
 		type: RECEIVED_DIRS,
 		dirs: json,
+		splat: splat,
 		receivedAt: Date.now()
 	}
 }
@@ -31,11 +32,30 @@ export function fetchDirs(splat) {
 		return fetch('/api/models/'+(splat !== undefined ? splat : ''))
 			.then(checkStatus)
 			.then(resp => resp.json())
-			.then(json => dispatch({
-				type: RECEIVED_DIRS,
-				dirs: json,
-				splat: splat
-			}));
+			.then(json => dispatch(receivedDirs(json, splat)));
 
+	}
+}
+
+function requestStl(url) {
+	return {
+		type: REQUEST_STL,
+		url: url
+	}
+}
+
+function receivedStl(url, byteStream) {
+	return {
+		type: RECEIVED_STL,
+		url: url,
+		stl: byteStream
+	}
+}
+
+export function fetchStl(url) {
+	return dispatch => {
+		dispatch(requestStl(url))
+		return fetch('/api/models/'+url)
+			.then(resp => dispatch(receivedStl(url, resp.body)));
 	}
 }
