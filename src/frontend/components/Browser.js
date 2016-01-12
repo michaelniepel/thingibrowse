@@ -36,9 +36,11 @@ class Browser extends React.Component {
               const lastIndex = path.lastIndexOf('/');
               const link = (s !== '..' ? path+'/'+s : (lastIndex === -1 ? '/' : '/'+path.slice(0, lastIndex)))
               const stl_url = path+'/'+s
+              let w = 300
+              let h = 300
               return s.indexOf('.stl') > 0 || s.indexOf('.STL') > 0 ?
                 <div className="pure-u-1-4" key={i}>
-                  <ModelViewer stl_url={stl_url} name={s} />
+                  <ModelViewer stl_url={stl_url} name={s} width={w} height={h} />
                 </div>
               : <div className="pure-u-1-4 dirItem" key={i}>
                   <h3><Link to={link}><i className="fa fa-folder-o fa-5x"></i><br/>{s}</Link></h3>

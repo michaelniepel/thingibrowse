@@ -3,7 +3,7 @@ import { fetchStl } from '../actions';
 import { connect } from 'react-redux';
 
 import THREE from 'three'
-import { Scene, PerspectiveCamera, DirectionalLight, Mesh, Object3D, Renderer, ReactTHREE } from './React3'
+import { Scene, PerspectiveCamera, DirectionalLight, Mesh, Object3D, Renderer } from './React3'
 
 class ModelViewer extends React.Component {
   constructor(props) {
@@ -176,16 +176,16 @@ class ModelViewer extends React.Component {
   }
 
   render() {
-    const { stl_url, name, stl } = this.props
-    let aspectratio = 1;
-    let cameraprops = {fov:75, aspect:aspectratio, near:1, far:5000, position:new THREE.Vector3(0,0,600), lookat:new THREE.Vector3(0,0,0)};
-    let mesh = null;
-    let meshProps = {};
+    const { stl_url, name, stl, width, height } = this.props
+    let aspectratio = width / height
+    let cameraprops = {fov:75, aspect:aspectratio, position:new THREE.Vector3(0,0,200), lookat:new THREE.Vector3(0,0,0)}
+    let mesh = null
+    let meshProps = {}
     if (stl && !stl.isFetching) {
       mesh = this.parseStlBinary(stl.stl)
-      meshProps.position = mesh.position;
+      meshProps.position = new THREE.Vector3(0,0,0)
       meshProps.geometry = mesh.geometry;
-      meshProps.material = mesh.material;
+      meshProps.material = new THREE.MeshBasicMaterial( { color: 0xC71585 } )
     }
     return (
       <div>
@@ -195,16 +195,12 @@ class ModelViewer extends React.Component {
         }
         {
           stl && !stl.isFetching &&
-          ReactTHREE.render(
-            <Renderer width="300" height="300">
-              <Scene width="300" height="300" camera="maincamera" background="0x202020" enableRapidRender="true">
+            <Renderer width={width} height={height}>
+              <Scene width={width} height={height} camera="maincamera" enableRapidRender="true">
                   <PerspectiveCamera name="maincamera" {...cameraprops} />
-                  <Object3D quaternion={mesh.quaternion} position={new THREE.Vector3(0,0,0)}>
-                    <Mesh {...meshProps}/>
-                  </Object3D>
+                  <Mesh {...meshProps}/>
               </Scene>
             </Renderer>
-          )
         }
       </div>
     );
@@ -214,6 +210,8 @@ ModelViewer.propTypes = {
   stl_url: React.PropTypes.string,
   name: React.PropTypes.string,
   stl: React.PropTypes.object,
+  width: React.PropTypes.number,
+  height: React.PropTypes.number,
 };
 
 function select(state, ownProps) {
