@@ -2,8 +2,8 @@ import React from 'react';
 import { fetchStl } from '../actions';
 import { connect } from 'react-redux';
 
-import THREE from 'three';
-import { Scene, PerspectiveCamera, DirectionalLight } from 'react-three';
+import THREE from 'three'
+import { Scene, PerspectiveCamera, DirectionalLight, Mesh, Object3D, Renderer, ReactTHREE } from './React3'
 
 class ModelViewer extends React.Component {
   constructor(props) {
@@ -49,7 +49,7 @@ class ModelViewer extends React.Component {
     // once we've assembled our geometry. This is a relatively
     // expensive operation, but only needs to be done once.
     geo.computeFaceNormals();
-    mesh = new THREE.Mesh(
+    let mesh = new THREE.Mesh(
       geo,
       new THREE.MeshLambertMaterial({
         overdraw:true,
@@ -57,8 +57,9 @@ class ModelViewer extends React.Component {
         shading: THREE.FlatShading
       })
     );
-    scene.add(mesh);
-    stl = null;
+    // scene.add(mesh);
+    // stl = null;
+    return mesh;
   }
 
   parseStl = function(stl) {
@@ -175,19 +176,36 @@ class ModelViewer extends React.Component {
   }
 
   render() {
-    const { stl_url, name } = this.props
-    var aspectratio = this.props.width / this.props.height;
-    var cameraprops = {fov : 75, aspect : aspectratio,
-                       near : 1, far : 5000,
-                       position : new THREE.Vector3(0,0,600),
-                       lookat : new THREE.Vector3(0,0,0)};
+    const { stl_url, name, stl } = this.props
+    let aspectratio = 1;
+    let cameraprops = {fov:75, aspect:aspectratio, near:1, far:5000, position:new THREE.Vector3(0,0,600), lookat:new THREE.Vector3(0,0,0)};
+    let mesh = null;
+    let meshProps = {};
+    if (stl && !stl.isFetching) {
+      mesh = this.parseStlBinary(stl.stl)
+      meshProps.position = mesh.position;
+      meshProps.geometry = mesh.geometry;
+      meshProps.material = mesh.material;
+    }
     return (
       <div>
         <h3><i className="fa fa-file fa-5x"></i><br/> { name }</h3>
-        <Scene width="300" height="300" camera="maincamera">
-            <PerspectiveCamera name="maincamera" {...cameraprops} />
-            <DirectionalLight />
-        </Scene>
+        {
+          stl && stl.isFetching && <div>Loading..</div>
+        }
+        {
+          stl && !stl.isFetching &&
+          ReactTHREE.render(
+            <Renderer width="300" height="300">
+              <Scene width="300" height="300" camera="maincamera" background="0x202020" enableRapidRender="true">
+                  <PerspectiveCamera name="maincamera" {...cameraprops} />
+                  <Object3D quaternion={mesh.quaternion} position={new THREE.Vector3(0,0,0)}>
+                    <Mesh {...meshProps}/>
+                  </Object3D>
+              </Scene>
+            </Renderer>
+          )
+        }
       </div>
     );
   }

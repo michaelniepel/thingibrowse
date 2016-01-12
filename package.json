@@ -13,12 +13,11 @@
     "react-dom": "^0.14.0",
     "react-redux": "^3.1.0",
     "react-router": "^1.0.0-rc1",
-    "react-three": "^0.7.5",
+    "three": "^0.73.0",
     "redux": "^3.0.2",
     "redux-thunk": "^1.0.0",
     "script-loader": "^0.6.1",
     "serve-static": "^1.10.0",
-    "three": "^0.73.0",
     "url-loader": "^0.5.7",
     "whatwg-fetch": "^0.9.0"
   },

@@ -32,7 +32,7 @@ export function fetchDirs(splat) {
 		return fetch('/api/models/'+(splat !== undefined ? splat : ''))
 			.then(checkStatus)
 			.then(resp => resp.json())
-			.then(json => dispatch(receivedDirs(json, splat)));
+			.then(json => dispatch(receivedDirs(json, splat)))
 
 	}
 }
@@ -56,6 +56,7 @@ export function fetchStl(url) {
 	return dispatch => {
 		dispatch(requestStl(url))
 		return fetch('/api/models/'+url)
-			.then(resp => dispatch(receivedStl(url, resp.body)));
+			.then(resp => resp.arrayBuffer())
+			.then(ab => dispatch(receivedStl(url, ab)))
 	}
 }
