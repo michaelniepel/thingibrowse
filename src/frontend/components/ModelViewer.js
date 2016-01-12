@@ -185,7 +185,7 @@ class ModelViewer extends React.Component {
       mesh = this.parseStlBinary(stl.stl)
       meshProps.position = new THREE.Vector3(0,0,0)
       meshProps.geometry = mesh.geometry;
-      meshProps.material = new THREE.MeshBasicMaterial( { color: 0xC71585 } )
+      meshProps.material = new THREE.MeshBasicMaterial( { color: 0xADFF2F } )
     }
     return (
       <div>
