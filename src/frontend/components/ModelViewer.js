@@ -184,9 +184,10 @@ class ModelViewer extends React.Component {
     if (stl && !stl.isFetching) {
       mesh = this.parseStlBinary(stl.stl)
       meshProps.position = new THREE.Vector3(0,0,0)
-      meshProps.geometry = mesh.geometry;
-      meshProps.material = new THREE.MeshBasicMaterial( { color: 0xADFF2F } )
+      meshProps.geometry = mesh.geometry
+      meshProps.material = new THREE.MeshBasicMaterial( { overdraw:true, color: 0xaa0000, shading: THREE.FlatShading } )
     }
+
     return (
       <div>
         <h3><i className="fa fa-file fa-5x"></i><br/> { name }</h3>
