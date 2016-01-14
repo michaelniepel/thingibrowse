@@ -8,6 +8,12 @@ import { Scene, PerspectiveCamera, DirectionalLight, Mesh, Object3D, Renderer } 
 class ModelViewer extends React.Component {
   constructor(props) {
     super(props);
+    var initialcamera = new THREE.PerspectiveCamera(60, 1, 0.1, 1000);
+    initialcamera.position.x = 300;
+    initialcamera.position.y = 300;
+    initialcamera.position.z = 300;
+    initialcamera.userData = null; // will set this up in componentDidMount
+    this.state = { camera: initialcamera };
   }
 
   parseStlBinary = function(stl) {
@@ -171,21 +177,44 @@ class ModelViewer extends React.Component {
     }
   }
 
+  componentDidMount() {
+    var zeroVec = new THREE.Vector3(0,0,0);
+    var componentinstance = this;
+    var spinquaternion = new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(0,1,0), 0.1);
+    var animationcallback = function(/*t*/) {
+      var camera = componentinstance.state.camera;
+      camera.position.applyQuaternion(spinquaternion);
+      camera.lookAt(zeroVec);
+      componentinstance.setState({camera:camera});      // 'update' the camera
+      camera.userData = requestAnimationFrame(animationcallback);
+    };
+    // add an interval timer function to rotation the camera
+    // the rAQ timer ID is dumped into the camera. Not the best place to put it probably.
+    this.state.camera.userData = requestAnimationFrame(animationcallback);
+  }
+
   componentWillMount() {
     this.props.dispatch(fetchStl(this.props.stl_url));
+  }
+
+  componentWillUnmount() {
+    if (this.state.camera.userData !== null) {
+      cancelAnimationFrame(this.state.camera.userData);
+    }
+    this.state.camera.userData = null;
   }
 
   render() {
     const { stl_url, name, stl, width, height } = this.props
     let aspectratio = width / height
-    let cameraprops = {fov:75, aspect:aspectratio, position:new THREE.Vector3(0,0,200), lookat:new THREE.Vector3(0,0,0)}
+    let cameraprops = {fov:75, aspect:aspectratio, position:new THREE.Vector3(100,100,200), lookat:new THREE.Vector3(0,0,0)}
     let mesh = null
     let meshProps = {}
     if (stl && !stl.isFetching) {
       mesh = this.parseStlBinary(stl.stl)
       meshProps.position = new THREE.Vector3(0,0,0)
       meshProps.geometry = mesh.geometry
-      meshProps.material = new THREE.MeshBasicMaterial( { overdraw:true, color: 0xaa0000, shading: THREE.FlatShading } )
+      meshProps.material = new THREE.MeshBasicMaterial( { overdraw:true, color: 0x99ff33, shading: THREE.FlatShading } )
     }
 
     return (
@@ -196,12 +225,11 @@ class ModelViewer extends React.Component {
         }
         {
           stl && !stl.isFetching &&
-            <Renderer width={width} height={height}>
-              <Scene width={width} height={height} camera="maincamera" enableRapidRender="true">
-                  <PerspectiveCamera name="maincamera" {...cameraprops} />
-                  <Mesh {...meshProps}/>
-              </Scene>
-            </Renderer>
+            React.createElement(
+              Renderer, {width: width, height: height },
+                React.createElement(Scene, {width: width, height: height, camera:this.state.camera },
+                  React.createElement(Mesh, {...meshProps}))
+            )
         }
       </div>
     );
