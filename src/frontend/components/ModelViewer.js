@@ -13,7 +13,7 @@ class ModelViewer extends React.Component {
     initialcamera.position.y = 300;
     initialcamera.position.z = 300;
     initialcamera.userData = null; // will set this up in componentDidMount
-    this.state = { camera: initialcamera };
+    this.state = { camera: initialcamera, turning: false };
   }
 
   parseStlBinary = function(stl) {
@@ -60,7 +60,7 @@ class ModelViewer extends React.Component {
       new THREE.MeshLambertMaterial({
         overdraw:true,
         color: 0xaa0000,
-        shading: THREE.FlatShading
+        // shading: THREE.FlatShading
       })
     );
     // scene.add(mesh);
@@ -149,7 +149,7 @@ class ModelViewer extends React.Component {
                       new THREE.MeshLambertMaterial({
                           overdraw:true,
                           color: 0xaa0000,
-                          shading: THREE.FlatShading
+                          // shading: THREE.FlatShading
                       }
                   ));
                   scene.add(mesh);
@@ -177,7 +177,7 @@ class ModelViewer extends React.Component {
     }
   }
 
-  componentDidMount() {
+  startCamera() {
     var zeroVec = new THREE.Vector3(0,0,0);
     var componentinstance = this;
     var spinquaternion = new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(0,1,0), 0.1);
@@ -186,11 +186,16 @@ class ModelViewer extends React.Component {
       camera.position.applyQuaternion(spinquaternion);
       camera.lookAt(zeroVec);
       componentinstance.setState({camera:camera});      // 'update' the camera
-      camera.userData = requestAnimationFrame(animationcallback);
+      if (componentinstance.state.turning)
+        camera.userData = requestAnimationFrame(animationcallback);
     };
     // add an interval timer function to rotation the camera
     // the rAQ timer ID is dumped into the camera. Not the best place to put it probably.
     this.state.camera.userData = requestAnimationFrame(animationcallback);
+  }
+
+  componentDidMount() {
+    this.startCamera();
   }
 
   componentWillMount() {
@@ -202,6 +207,23 @@ class ModelViewer extends React.Component {
       cancelAnimationFrame(this.state.camera.userData);
     }
     this.state.camera.userData = null;
+  }
+
+  handleOnMouseEnter(e) {
+    this.setState({turning: true});
+  }
+
+  handleOnMouseLeave(e) {
+    this.setState({turning: false});
+  }
+
+  shouldComponentUpdate(nextProps, nextState){
+    if (this.state.turning != nextState.turning)
+      return true;
+    return false;
+  }
+  componentWillUpdate(nextProps, nextState) {
+    this.startCamera()
   }
 
   render() {
@@ -218,7 +240,7 @@ class ModelViewer extends React.Component {
     }
 
     return (
-      <div>
+      <div onMouseEnter={this.handleOnMouseEnter.bind(this)} onMouseLeave={this.handleOnMouseLeave.bind(this)}>
         <h3><i className="fa fa-file fa-5x"></i><br/> { name }</h3>
         {
           stl && stl.isFetching && <div>Loading..</div>
