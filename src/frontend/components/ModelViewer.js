@@ -241,7 +241,7 @@ class ModelViewer extends React.Component {
 
     return (
       <div onMouseEnter={this.handleOnMouseEnter.bind(this)} onMouseLeave={this.handleOnMouseLeave.bind(this)}>
-        <h3><i className="fa fa-file fa-5x"></i><br/> { name }</h3>
+        <h3><i className="fa fa-file fa-5x"></i>{ name }</h3>
         {
           stl && stl.isFetching && <div>Loading..</div>
         }

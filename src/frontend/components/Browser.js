@@ -14,6 +14,7 @@ class Browser extends React.Component {
 
   componentWillMount() {
     // console.log('browser component will mount');
+    this.setState({stl: null});
     const { routeParams, dispatch } = this.props;
     dispatch(fetchDirs(routeParams.splat));
   }
@@ -26,27 +27,56 @@ class Browser extends React.Component {
       dispatch(fetchDirs(routeParams.splat));
   }
 
+  handleOnMouseEnter(stl_url) {
+    this.setState({stl: stl_url})
+    console.log(this.state);
+  }
+
+  shouldComponentUpdate(nextProps, nextState) {
+    // console.log(nextProps, nextState);
+    if (this.state.stl === null)
+      return true;
+    if (this.state.stl !== nextState.stl) {
+      return true;
+    }
+    return false;
+  }
+
   render() {
     const { dirs, isFetching, routeParams } = this.props;
     const path = routeParams.splat === undefined ? '' : routeParams.splat;
+    let w = 300
+    let h = 300
     return (
       <div className="pure-g browser">
+        <div className="pure-u-3-5">
+          <ul>
+            {
+              dirs.map((s, i) => {
+                const lastIndex = path.lastIndexOf('/');
+                const link = (s !== '..' ? path+'/'+s : (lastIndex === -1 ? '/' : '/'+path.slice(0, lastIndex)))
+                const stl_url = path+'/'+s  
+                return s.indexOf('.stl') > 0 || s.indexOf('.STL') > 0 ?
+                  <li key={i} onMouseEnter={() => this.handleOnMouseEnter(stl_url)}>
+                    <i className="fa fa-file fa-2x"></i>{ s }
+                  </li>
+                : <li key={i}>
+                    <Link to={link}><i className="fa fa-folder-o fa-2x"></i>{s}</Link>
+                  </li>;
+              })
+            }
+          </ul>
+        </div>
+        <div className="pure-u-2-5">
           {
-            dirs.map((s, i) => {
-              const lastIndex = path.lastIndexOf('/');
-              const link = (s !== '..' ? path+'/'+s : (lastIndex === -1 ? '/' : '/'+path.slice(0, lastIndex)))
-              const stl_url = path+'/'+s
-              let w = 300
-              let h = 300
-              return s.indexOf('.stl') > 0 || s.indexOf('.STL') > 0 ?
-                <div className="pure-u-1-4" key={i}>
-                  <ModelViewer stl_url={stl_url} name={s} width={w} height={h} />
-                </div>
-              : <div className="pure-u-1-4 dirItem" key={i}>
-                  <h3><Link to={link}><i className="fa fa-folder-o fa-5x"></i><br/>{s}</Link></h3>
-                </div>;
-            })
+            (
+              this.state && this.state.stl ?
+              <ModelViewer stl_url={this.state.stl} name="aaa" width={w} height={h} />
+              :
+              <span>N/A</span>
+            )
           }
+        </div>
       </div>
     );
   }

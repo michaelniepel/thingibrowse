@@ -3,3 +3,11 @@
   overflow: hidden;
   text-overflow: ellipsis;
 }
+
+.browser li {
+  list-style: none;
+}
+
+.browser .fa {
+  margin-right: 10px;
+}
