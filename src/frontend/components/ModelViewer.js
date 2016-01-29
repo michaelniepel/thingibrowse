@@ -5,6 +5,8 @@ import { connect } from 'react-redux';
 import THREE from 'three'
 import { Scene, PerspectiveCamera, DirectionalLight, Mesh, Object3D, Renderer } from './React3'
 
+require("./ModelViewer.css");
+
 class ModelViewer extends React.Component {
   constructor(props) {
     super(props);
@@ -13,7 +15,7 @@ class ModelViewer extends React.Component {
     initialcamera.position.y = 300;
     initialcamera.position.z = 300;
     initialcamera.userData = null; // will set this up in componentDidMount
-    this.state = { camera: initialcamera, turning: false };
+    this.state = { camera: initialcamera };
   }
 
   parseStlBinary = function(stl) {
@@ -186,8 +188,7 @@ class ModelViewer extends React.Component {
       camera.position.applyQuaternion(spinquaternion);
       camera.lookAt(zeroVec);
       componentinstance.setState({camera:camera});      // 'update' the camera
-      if (componentinstance.state.turning)
-        camera.userData = requestAnimationFrame(animationcallback);
+      camera.userData = requestAnimationFrame(animationcallback);
     };
     // add an interval timer function to rotation the camera
     // the rAQ timer ID is dumped into the camera. Not the best place to put it probably.
@@ -209,21 +210,15 @@ class ModelViewer extends React.Component {
     this.state.camera.userData = null;
   }
 
-  handleOnMouseEnter(e) {
-    this.setState({turning: true});
-  }
-
-  handleOnMouseLeave(e) {
-    this.setState({turning: false});
-  }
-
-  shouldComponentUpdate(nextProps, nextState){
-    if (this.state.turning != nextState.turning)
+  shouldComponentUpdate(nextProps, nextState) {
+    if (this.props.stl_url && this.props.stl_url !== nextProps.stl_url) {
       return true;
+    }
     return false;
   }
-  componentWillUpdate(nextProps, nextState) {
-    this.startCamera()
+
+  componentWillUpdate() {
+    this.props.dispatch(fetchStl(this.props.stl_url));
   }
 
   render() {
@@ -240,8 +235,8 @@ class ModelViewer extends React.Component {
     }
 
     return (
-      <div onMouseEnter={this.handleOnMouseEnter.bind(this)} onMouseLeave={this.handleOnMouseLeave.bind(this)}>
-        <h3><i className="fa fa-file fa-5x"></i>{ name }</h3>
+      <div className="modelViewer">
+        <h3>{ name }</h3>
         {
           stl && stl.isFetching && <div>Loading..</div>
         }

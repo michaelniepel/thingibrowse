@@ -27,19 +27,9 @@ class Browser extends React.Component {
       dispatch(fetchDirs(routeParams.splat));
   }
 
-  handleOnMouseEnter(stl_url) {
-    this.setState({stl: stl_url})
+  handleOnMouseEnter(stl_url, name) {
+    this.setState({stl: stl_url, name: name})
     console.log(this.state);
-  }
-
-  shouldComponentUpdate(nextProps, nextState) {
-    // console.log(nextProps, nextState);
-    if (this.state.stl === null)
-      return true;
-    if (this.state.stl !== nextState.stl) {
-      return true;
-    }
-    return false;
   }
 
   render() {
@@ -55,9 +45,9 @@ class Browser extends React.Component {
               dirs.map((s, i) => {
                 const lastIndex = path.lastIndexOf('/');
                 const link = (s !== '..' ? path+'/'+s : (lastIndex === -1 ? '/' : '/'+path.slice(0, lastIndex)))
-                const stl_url = path+'/'+s  
+                const stl_url = path+'/'+s
                 return s.indexOf('.stl') > 0 || s.indexOf('.STL') > 0 ?
-                  <li key={i} onMouseEnter={() => this.handleOnMouseEnter(stl_url)}>
+                  <li key={i} onMouseEnter={() => this.handleOnMouseEnter(stl_url, s)}>
                     <i className="fa fa-file fa-2x"></i>{ s }
                   </li>
                 : <li key={i}>
@@ -71,7 +61,7 @@ class Browser extends React.Component {
           {
             (
               this.state && this.state.stl ?
-              <ModelViewer stl_url={this.state.stl} name="aaa" width={w} height={h} />
+              <ModelViewer stl_url={this.state.stl} name={this.state.name} width={w} height={h} />
               :
               <span>N/A</span>
             )
